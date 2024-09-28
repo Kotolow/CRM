@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  crm:
+    build:
+      context: .
+      dockerfile: ./cmd/crm/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=0.tcp.eu.ngrok.io
+      - DB_PORT=10717
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=root
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - GIT_NAME=HAndHTemp
+      - GIT_TOKEN=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
+  postgres:
+    image: postgres:15.2-alpine3.17
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"

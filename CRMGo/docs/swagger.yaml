@@ -1,0 +1,540 @@
+definitions:
+  CRMGo_internal_models.Comment:
+    properties:
+      author:
+        type: string
+      text:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  CRMGo_internal_models.Project:
+    properties:
+      code:
+        type: string
+      created_by:
+        type: integer
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  CRMGo_internal_models.Task:
+    properties:
+      assigned_to:
+        type: integer
+      comments:
+        items:
+          $ref: '#/definitions/CRMGo_internal_models.Comment'
+        type: array
+      createdAt:
+        type: string
+      description:
+        type: string
+      due_date:
+        type: string
+      priority:
+        type: string
+      project_id:
+        type: integer
+      status:
+        type: string
+      taskId:
+        type: string
+      time_spent:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  CRMGo_pkg_git.GitHubInfo:
+    properties:
+      body:
+        type: string
+      branch_name:
+        type: string
+      source_branch:
+        type: string
+      target_branch:
+        type: string
+      task_id:
+        type: string
+      title:
+        type: string
+    type: object
+  CRMGo_pkg_response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/charts/{code}:
+    get:
+      description: Get All Info for Gantt Chart
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Get Gantt Chart
+      tags:
+      - charts
+  /v1/git/{owner}/{repo}/new_branch:
+    post:
+      consumes:
+      - application/json
+      description: Creates branch for the task
+      parameters:
+      - description: Owner
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: Repository
+        in: path
+        name: repo
+        required: true
+        type: string
+      - description: Info For GitHub
+        in: body
+        name: gitInfo
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_pkg_git.GitHubInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Create branch
+      tags:
+      - git
+  /v1/git/{owner}/{repo}/new_pr:
+    post:
+      consumes:
+      - application/json
+      description: Creates PR for the task
+      parameters:
+      - description: Owner
+        in: path
+        name: owner
+        required: true
+        type: string
+      - description: Repository
+        in: path
+        name: repo
+        required: true
+        type: string
+      - description: Info For GitHub
+        in: body
+        name: gitInfo
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_pkg_git.GitHubInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Create PR
+      tags:
+      - git
+  /v1/git/{taskId}/branches:
+    get:
+      description: Get all branches connected with the task
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Get Branches
+      tags:
+      - git
+  /v1/git/{taskId}/commits:
+    get:
+      description: Get all commits connected with the task
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Get Commits
+      tags:
+      - git
+  /v1/git/{taskId}/pull_requests:
+    get:
+      description: Get all Pull Requests connected with the task
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Get PRs
+      tags:
+      - git
+  /v1/git/repos:
+    get:
+      description: Get all repositories connected with organization
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Get Repos
+      tags:
+      - git
+  /v1/projects:
+    get:
+      description: Find all projects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Find all projects endpoint
+      tags:
+      - projects
+    post:
+      consumes:
+      - application/json
+      description: Creates project
+      parameters:
+      - description: Project
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_internal_models.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Create project endpoint
+      tags:
+      - projects
+  /v1/projects/{code}:
+    delete:
+      description: Delete project
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Delete project endpoint
+      tags:
+      - projects
+    get:
+      description: Find project by id
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Find project by id endpoint
+      tags:
+      - projects
+    put:
+      consumes:
+      - application/json
+      description: Update project
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      - description: Project
+        in: body
+        name: updatedInfo
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_internal_models.Project'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Update project endpoint
+      tags:
+      - projects
+  /v1/projects/{code}/tasks:
+    get:
+      description: Find all tasks
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Find all tasks endpoint
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Creates task
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      - description: Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_internal_models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Create task endpoint
+      tags:
+      - tasks
+  /v1/projects/{code}/tasks/{taskId}:
+    delete:
+      description: Delete task
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Delete task endpoint
+      tags:
+      - tasks
+    get:
+      description: Find task by id
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Find task by id endpoint
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: Update task
+      parameters:
+      - description: Project code
+        in: path
+        name: code
+        required: true
+        type: string
+      - description: Task ID
+        in: path
+        name: taskId
+        required: true
+        type: string
+      - description: Task
+        in: body
+        name: updatedInfo
+        required: true
+        schema:
+          $ref: '#/definitions/CRMGo_internal_models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/CRMGo_pkg_response.Response'
+      summary: Update task endpoint
+      tags:
+      - tasks
+swagger: "2.0"
