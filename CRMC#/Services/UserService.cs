@@ -156,9 +156,8 @@ public class UserService : IUserService
 
     public string GenerateJwtToken(User user)
     {
-        Env.Load();
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
+        var key = Encoding.ASCII.GetBytes("55mrQsoISjYEjxdv2HBwhhqLPjy1BHb3___myseprsrctefdfdk");
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]

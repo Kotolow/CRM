@@ -3,10 +3,8 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Sidebar from '../Sidebar/Sidebar';
 import Header from "../Header/Header";
-import '../Projects/Projects.scss'
+import '../Projects/Projects.scss';
 import axios from 'axios';
-
-
 
 const initialData = {
   tasks: {
@@ -16,7 +14,7 @@ const initialData = {
   },
   columns: {
     'column-1': {
-      id: 'open',
+      id: 'column-1',
       title: 'Open',
       taskIds: ['task-1', 'task-2'],
     },
@@ -44,28 +42,42 @@ const ItemTypes = {
 };
 
 const TaskCard = ({ task, index }) => {
-  const [, ref] = useDrag({
+  const [{ isDragging }, ref] = useDrag({
     type: ItemTypes.TASK,
     item: { id: task.id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
 
+  // Применяем прозрачность при перетаскивании
+  const opacity = isDragging ? 0.5 : 1;
+
   return (
-    <div ref={ref} className="bg-white p-4 rounded-lg shadow mb-2">
+    <div ref={ref} className="bg-white p-4 rounded-lg shadow mb-2" style={{ opacity }}>
       <h4>{task.title}</h4>
       <p>{task.time}</p>
     </div>
   );
 };
 
-
 const Column = ({ column, tasks, moveTask }) => {
-  const [, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.TASK,
     drop: (item) => moveTask(item.id, column.id),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
   });
 
+  // Изменяем стиль обводки, если элемент находится над колонкой
+  const borderColor = isOver ? 'border-blue-500' : 'border-transparent';
+
   return (
-    <div ref={drop} className="bg-gray-200 p-4 rounded-lg min-h-[400px]">
+    <div
+      ref={drop}
+      className={`bg-gray-200 p-4 rounded-lg min-h-[400px] border-2 ${borderColor} transition-all duration-300`}
+    >
       <h2 className="text-xl font-semibold mb-4">{column.title}</h2>
       {tasks.map((task, index) => (
         <TaskCard key={task.id} task={task} index={index} />
@@ -116,7 +128,6 @@ const Dashboard = () => {
     }
 
     const newSourceTaskIds = sourceColumn.taskIds.filter((id) => id !== taskId);
-
     const newDestinationTaskIds = [...destinationColumn.taskIds, taskId];
 
     const newColumns = {
@@ -132,27 +143,21 @@ const Dashboard = () => {
     <DndProvider backend={HTML5Backend}>
       <div className="flex h-screen bg-gray-100">
         <Sidebar />
-        <div className='content'>  
-          <Header title="Dashboard" buttonText="Add Task"/>
-        <div className="flex-1">
+        <div className="content">
+          <Header title="Dashboard" buttonText="Add Task" isSearched={false} isAdd={true} />
+          <div className="flex-1">
+            <div className="grid grid-cols-4 gap-6">
+              {data.columnOrder.map((columnId) => {
+                const column = data.columns[columnId];
+                const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
 
-          <div className="grid grid-cols-4 gap-6">
-            {data.columnOrder.map((columnId) => {
-              const column = data.columns[columnId];
-              const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
-
-              return (
-                <Column
-                  key={column.id}
-                  column={column}
-                  tasks={tasks}
-                  moveTask={moveTask}
-                />
-              );
-            })}
+                return (
+                  <Column key={column.id} column={column} tasks={tasks} moveTask={moveTask} />
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </DndProvider>
   );

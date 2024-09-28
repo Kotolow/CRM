@@ -9,7 +9,6 @@ using DotNetEnv;
 using Microsoft.OpenApi.Models;
 
 
-Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 // db context
@@ -21,7 +20,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // auth
-var key = Environment.GetEnvironmentVariable("JWT_KEY");
+var key = "55mrQsoISjYEjxdv2HBwhhqLPjy1BHb3___myseprsrctefdfdk";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -31,8 +30,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
-            ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+            ValidIssuer = "HornsAndHooves",
+            ValidAudience = "AuthHornsAndHoovesClients",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) 
         };
     });

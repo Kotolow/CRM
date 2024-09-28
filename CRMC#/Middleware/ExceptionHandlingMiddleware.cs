@@ -31,7 +31,7 @@ public class ExceptionHandlingMiddleware
         var response = new ApiResponse<object>
         {
             status_code = context.Response.StatusCode,
-            message = "Server internal error. Please try later!",
+            message = $"{ex}",
             data = null
         };
 

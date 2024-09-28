@@ -1,85 +1,74 @@
-import React, {useEffect} from 'react';
-import './Projects.scss'
-import { FiPlus } from 'react-icons/fi';
-
+import React, { useState, useEffect } from 'react';
+import './Projects.scss';
 import ProjectCard from "../ProjectCard/ProjectCard";
 import Sidebar from "../Sidebar/Sidebar";
 import Header from '../Header/Header';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../assets/Loader/Loader";
 
 const Projects = () => {
+    const navigate = useNavigate();
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); 
 
-    const navigate = useNavigate()
+    const onClickProjectDetails = (id) => {
+        navigate(`/project/${id}`);
+    };
 
-    const projectDetails  = (id) => {
-        navigate(`/project/${id}`)
-    }
-
-
-
-
+    useEffect(() => {
+        fetch('https://a69e816f684673.lhr.life/v1/projects')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((json) => {
+                setProjects(json.data || []);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error('Error fetching projects:', err);
+                setError('Failed to load projects');
+                setLoading(false);
+            });
+    }, []);
 
     return (
         <div className="dashboard">
-            <Sidebar/>
+            <Sidebar />
             <div className="content">
-                <Header title="Projects" buttonText="Add Project"/>
+                <Header title="Projects" buttonText="Add Project" isAdd={true} isSearched={true} />
                 <section className="nearest-events">
-                    <div className="events-list">
-                        <ProjectCard
-                            title="Presentation of the new department"
-                            time="Today | 6:00 PM"
-                            duration="4h"
-                            status="up"
-                        />
-                        <ProjectCard
-                            title="Anna's Birthday"
-                            time="Today | 5:00 PM"
-                            duration="2h"
-                            status="down"
-                        />
-                        <ProjectCard
-                            title="Meeting with Development Team"
-                            time="Tomorrow | 5:00 PM"
-                            duration="4h"
-                            status="up"
-                        />
-                        <ProjectCard
-                            title="Ray's Birthday"
-                            time="Tomorrow | 2:00 PM"
-                            duration="1h 30m"
-                            status="down"
-                        />
-                        <ProjectCard
-                            title="Meeting with CEO"
-                            time="Sep 14 | 5:00 PM"
-                            duration="1h"
-                            status="up"
-                        />
-                        <ProjectCard
-                            title="Movie night (Tenet)"
-                            time="Sep 15 | 5:00 PM"
-                            duration="3h"
-                            status="down"
-                        />
-                        <ProjectCard
-                            title="Lucas's Birthday"
-                            time="Sep 29 | 5:30 PM"
-                            duration="2h"
-                            status="down"
-                        />
-                        <ProjectCard
-                            title="Meeting with CTO"
-                            time="Sep 30 | 12:00 PM"
-                            duration="1h"
-                            status="up"
-                        />
-                    </div>
+                    {loading ? (
+                        <div className='flex justify-center items-center mt-20 flex-col'>
+                            <Loader />
+                            <h1 className="text-2xl font-bold text-gray-800">Loading...</h1>
+                        </div>
+                    ) : error ? (
+                        <div className='flex justify-center items-center mt-20 flex-col'>
+                            <h1 className="text-2xl font-bold text-red-600">{error}</h1>
+                        </div>
+                    ) : projects.length ? (
+                        <div className="events-list">
+                            {projects.map((obj, index) => (
+                                <ProjectCard
+                                    key={obj.id || index}
+                                    {...obj}
+                                    onClickProjectDetails={onClickProjectDetails}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className='flex justify-center items-center mt-20 flex-col'>
+                            <h1 className="text-2xl font-bold text-gray-800">No projects found :(</h1>
+                        </div>
+                    )}
                 </section>
             </div>
         </div>
     );
 };
-
 
 export default Projects;

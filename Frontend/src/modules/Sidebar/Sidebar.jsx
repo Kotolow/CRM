@@ -19,7 +19,7 @@ const Sidebar = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-6">H&H CRM</h1>
         <ul>
           <li className='mb-6'>
-            <a href="/projects" className={`flex items-center ${active === 'projects' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
+            <a href="/" className={`flex items-center ${active === 'projects' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
                onClick={() => toggleMenu('projects')}>
               <AiFillHome className="mr-3"/>
               Projects
@@ -41,7 +41,7 @@ const Sidebar = () => {
           </li>
         </ul>
         <div className="absolute bottom-0 left-0 w-full p-6">
-          <a href="/" className="flex items-center text-gray-700 hover:text-red-500">
+          <a href="/" className="flex items-center text-gray-700 hover:text-red-500 pl-6">
             <FiLogOut className="mr-3" />
             Logout
           </a>

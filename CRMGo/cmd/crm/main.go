@@ -9,15 +9,6 @@ import (
 )
 
 func main() {
-	//os.Setenv("DB_HOST", "0.tcp.eu.ngrok.io")
-	//os.Setenv("DB_PORT", "10717")
-	//os.Setenv("DB_USER", "root")
-	//os.Setenv("DB_PASSWORD", "password")
-	//os.Setenv("DB_NAME", "root")
-	//os.Setenv("SMTP_HOST", "172.19.0.2")
-	//os.Setenv("SMTP_PORT", "1025")
-	//os.Setenv("GIT_NAME", "HAndHTemp")
-	//os.Setenv("GIT_TOKEN", "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")
 
 	token := os.Getenv("GIT_TOKEN")
 
@@ -26,7 +17,6 @@ func main() {
 	taskRepo := database.NewTaskRepo(db)
 	projectRepo := database.NewProjectRepo(db)
 	ganttRepo := database.NewGanttChartRepo(db)
-	//notificationRepo := database.NewNotificationService(db)
 	taskHandler := v1.NewTaskHandler(*taskRepo)
 	projectHandler := v1.NewProjectHandler(*projectRepo)
 	ganttHandler := v1.NewGanttHandler(*ganttRepo)
@@ -36,8 +26,8 @@ func main() {
 
 	router := api.NewRouter(controller)
 
-	//err := router.Run(":8081")
-	err := router.Run()
+	err := router.Run(":8081")
+	//err := router.Run()
 	if err != nil {
 		panic(err)
 	}
