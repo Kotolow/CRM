@@ -7,8 +7,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - DB_HOST=0.tcp.eu.ngrok.io
-      - DB_PORT=10717
+      - DB_HOST=6.tcp.eu.ngrok.io
+      - DB_PORT=15358
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_NAME=root
