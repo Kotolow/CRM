@@ -1,0 +1,56 @@
+.project-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  &.up {
+    border-left: 4px solid #2563eb;
+  }
+
+  &.down {
+    border-left: 4px solid #ff4d4d;
+  }
+
+  .event-info {
+    h3 {
+      font-size: 18px;
+      color: #333;
+    }
+
+    p {
+      color: #999;
+      margin-top: 5px;
+    }
+  }
+
+  .event-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .duration {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .status-icon {
+      margin-top: 10px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+
+      &.up {
+        background-color: #2563eb;
+      }
+
+      &.down {
+        background-color: #ff4d4d;
+      }
+    }
+  }
+}

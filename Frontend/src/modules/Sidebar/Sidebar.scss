@@ -1,0 +1,60 @@
+.sidebar {
+  width: 20%;
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  nav {
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 20px 0;
+        font-size: 16px;
+        color: #4a4a4a;
+        cursor: pointer;
+
+        &.active {
+          color: #2563eb;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .support {
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 20px;
+
+    img {
+      width: 24px;
+      margin-right: 10px;
+    }
+
+    span {
+      font-size: 16px;
+      color: #4a4a4a;
+    }
+  }
+
+  .logout {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 60vh;
+    cursor: pointer;
+  }
+}
