@@ -17,7 +17,7 @@ const Projects = () => {
     };
 
     useEffect(() => {
-        fetch('https://a69e816f684673.lhr.life/v1/projects')
+        fetch('http://localhost/v1/projects')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
