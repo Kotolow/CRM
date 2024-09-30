@@ -1,5 +1,20 @@
 version: '3.7'
 services:
+  postgres:
+    image: postgres:15.2-alpine3.17
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./CRMGo/sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./CRMGo/sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   crm:
     build:
       context: CRMGo
@@ -7,8 +22,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - DB_HOST=6.tcp.eu.ngrok.io
-      - DB_PORT=15358
+      - DB_HOST=postgres
+      - DB_PORT=5432
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_NAME=root
@@ -16,6 +31,9 @@ services:
       - SMTP_PORT=1025
       - GIT_NAME=HAndHTemp
       - GIT_TOKEN=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
+    depends_on:
+      postgres:
+        condition: service_healthy
   crm_backend:
     build:
       context: CRMC#

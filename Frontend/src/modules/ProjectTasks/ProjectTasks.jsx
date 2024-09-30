@@ -29,7 +29,7 @@ const ProjectTasks = ({}) => {
         <div className="tasks-container">
             <Sidebar/>
             <main className="content">
-                <Header title='Project Tasks' buttonText='Add tasks'/>
+                <Header title='Project Tasks' buttonText='Add tasks' isAdd={true} isSearched={true} itemName={'Task name'} itemDescription={'Task Description'} isDatePicker={true} isSelect={false} isPriority={true}/>
                 <section className="task-details">
                     <div className="task-list">
                         <h3>Current Tasks</h3>
