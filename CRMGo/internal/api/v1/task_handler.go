@@ -45,7 +45,7 @@ func (h *TaskHandler) Create(c *gin.Context) {
 	webResponse := response.Response{
 		Code:   200,
 		Status: http.StatusText(http.StatusOK),
-		Data:   nil,
+		Data:   task,
 	}
 
 	c.JSON(http.StatusOK, webResponse)
@@ -99,7 +99,7 @@ func (h *TaskHandler) Update(c *gin.Context) {
 	webResponse := response.Response{
 		Code:   200,
 		Status: http.StatusText(http.StatusOK),
-		Data:   nil,
+		Data:   task,
 	}
 
 	c.JSON(http.StatusOK, webResponse)

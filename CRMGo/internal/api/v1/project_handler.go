@@ -43,7 +43,7 @@ func (h *ProjectHandler) Create(c *gin.Context) {
 	webResponse := response.Response{
 		Code:   200,
 		Status: http.StatusText(http.StatusOK),
-		Data:   nil,
+		Data:   project,
 	}
 
 	c.JSON(http.StatusOK, webResponse)
@@ -78,7 +78,7 @@ func (h *ProjectHandler) Update(c *gin.Context) {
 	webResponse := response.Response{
 		Code:   200,
 		Status: http.StatusText(http.StatusOK),
-		Data:   nil,
+		Data:   project,
 	}
 
 	c.JSON(http.StatusOK, webResponse)
