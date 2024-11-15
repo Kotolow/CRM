@@ -23,7 +23,13 @@ func (t *TaskRepo) Create(task models.Task, code string) error {
 	if result.Error != nil {
 		slog.Error(fmt.Sprintf("db_task: %v", result.Error.Error()))
 	}
-	newId, err := utils.NewTaskName(code + "-0")
+	var newId string
+	var err error
+	if lastTask.TaskId != "" {
+		newId, err = utils.NewTaskName(lastTask.TaskId)
+	} else {
+		newId, err = utils.NewTaskName(code + "-0")
+	}
 	if err != nil {
 		slog.Error(fmt.Sprintf("db_task: %v", err.Error()))
 		return result.Error
